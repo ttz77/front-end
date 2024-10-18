@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { computed } from "vue";
+import { useRoute, RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 
 const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
+
+const route = useRoute();
+const currentRouteName = computed(() => route.name as string);
 </script>
 
 <template>
