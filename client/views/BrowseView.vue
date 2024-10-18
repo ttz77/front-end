@@ -13,9 +13,6 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
       <h1 v-if="isLoggedIn">Welcome {{ currentUsername }}!</h1>
       <h1 v-else>Please login!</h1>
     </section>
-    <router-link to="/posts" custom v-slot="{ navigate }">
-      <button @click="navigate" role="link">Create an Event!</button>
-    </router-link>
     <EventListComponent />
   </main>
 </template>

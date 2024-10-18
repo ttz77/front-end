@@ -27,7 +27,7 @@ onBeforeMount(async () => {
       <div class="title">
         <img src="@/assets/images/logo.svg" />
         <RouterLink :to="{ name: 'Home' }">
-          <h1>Social Media App</h1>
+          <h1>SafeCircle</h1>
         </RouterLink>
       </div>
       <ul>
@@ -46,12 +46,45 @@ onBeforeMount(async () => {
       <p>{{ toast.message }}</p>
     </article>
   </header>
-  <RouterView />
+  <main>
+    <RouterView />
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <ul>
+      <li>
+        <RouterLink :to="{ name: 'Home' }" :class="{ active: currentRouteName === 'Home' }">
+          <span aria-hidden="true">🏠</span>
+          <span class="visually-hidden">Home</span>
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink :to="{ name: 'Browse' }" :class="{ active: currentRouteName === 'Browse' }">
+          <span aria-hidden="true">🔍</span>
+          <span class="visually-hidden">Browse</span>
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink :to="{ name: 'Plans' }" :class="{ active: currentRouteName === 'Plans' }">
+          <span aria-hidden="true">📅</span>
+          <span class="visually-hidden">Plans</span>
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink :to="{ name: 'Profile' }" :class="{ active: currentRouteName === 'Profile' }">
+          <span aria-hidden="true">👤</span>
+          <span class="visually-hidden">Profile</span>
+        </RouterLink>
+      </li>
+    </ul>
+  </nav>
 </template>
 
 <style scoped>
 @import "./assets/toast.css";
 
+/* Top navigation */
 nav {
   padding: 1em 2em;
   background-color: lightgray;
@@ -91,5 +124,47 @@ ul {
 
 .underline {
   text-decoration: underline;
+}
+
+/* Bottom navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #ecf0f1;
+}
+
+.bottom-nav ul {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0;
+}
+
+.bottom-nav li {
+  text-align: center;
+}
+
+.bottom-nav a {
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.active {
+  text-decoration: underline;
+}
+
+/* Adjust main content to prevent overlap with bottom nav */
+main {
+  padding-bottom: 60px; /* Adjust this value if needed */
 }
 </style>

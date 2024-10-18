@@ -6,6 +6,11 @@ import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import SettingView from "../views/SettingView.vue";
+import BrowseView from "@/views/BrowseView.vue";
+import PlansView from "@/views/PlansView.vue";
+import ProfileView from "@/views/ProfileView.vue";
+import PostView from "../views/PostView.vue";
+import VerificationView from "../views/VerificationView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -14,6 +19,36 @@ const router = createRouter({
       path: "/",
       name: "Home",
       component: HomeView,
+    },
+    {
+      path: "/browse",
+      name: "Browse",
+      component: BrowseView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/plans",
+      name: "Plans",
+      component: PlansView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/posts",
+      name: "Posts",
+      component: PostView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/profile",
+      name: "Profile",
+      component: ProfileView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/verification",
+      name: "Verification",
+      component: VerificationView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/setting",
