@@ -17,10 +17,24 @@ import { z } from "zod";
 class Routes {
   // Synchronize the concepts from `app.ts`.
 
+  /**
+   * Get the current session user with role.
+   * @returns The username and role of the current user.
+   */
   @Router.get("/session")
   async getSessionUser(session: SessionDoc) {
-    const user = Sessioning.getUser(session);
-    return await Authing.getUserById(user);
+    const userID = Sessioning.getUser(session);
+    const user = await Authing.getUserById(userID);
+
+    if (!user) {
+      throw new NotFoundError("User not found.");
+    }
+
+    // Return only the necessary fields to the frontend
+    return {
+      username: user.username,
+      role: user.role, // Include the role field
+    };
   }
 
   @Router.get("/users")
@@ -190,6 +204,13 @@ class Routes {
    */
   @Router.put("/verifications/:userID/approve")
   async approveVerification(session: SessionDoc, userID: string) {
+    const currentUserID = Sessioning.getUser(session);
+    const currentUser = await Authing.getUserById(currentUserID);
+
+    if (currentUser.role !== "admin") {
+      throw new Error("Only admin users can approve verifications.");
+    }
+
     const userObjectID = new ObjectId(userID);
     await VerifyingIdentity.approveVerification(userObjectID);
     return { msg: "Verification approved successfully." };
@@ -202,13 +223,123 @@ class Routes {
    */
   @Router.put("/verifications/:userID/reject")
   async rejectVerification(session: SessionDoc, userID: string) {
+    const currentUserID = Sessioning.getUser(session);
+    const currentUser = await Authing.getUserById(currentUserID);
+
+    if (currentUser.role !== "admin") {
+      throw new Error("Only admin users can reject verifications.");
+    }
+
     const userObjectID = new ObjectId(userID);
     await VerifyingIdentity.rejectVerification(userObjectID);
     return { msg: "Verification rejected successfully." };
   }
+  @Router.get("/verifications/pending")
+  async listPendingVerifications(session: SessionDoc) {
+    const currentUserID = Sessioning.getUser(session);
+    const currentUser = await Authing.getUserById(currentUserID);
+
+    if (currentUser.role !== "admin") {
+      throw new Error("Only admin users can access pending verifications.");
+    }
+
+    const pendingVerifications = await VerifyingIdentity.verifications.readMany({ status: "pending" });
+    // Optionally, include user information
+    const results = await Promise.all(
+      pendingVerifications.map(async (verification) => {
+        const user = await Authing.getUserById(verification.userID);
+        return {
+          userID: verification.userID,
+          username: user.username,
+          data: verification.verificationData.data,
+        };
+      }),
+    );
+    return results;
+  }
+  @Router.get("/verifications/:userID")
+  async getVerificationDetails(session: SessionDoc, userID: string) {
+    const currentUserID = Sessioning.getUser(session);
+    const currentUser = await Authing.getUserById(currentUserID);
+
+    if (currentUser.role !== "admin") {
+      throw new Error("Only admin users can view verification details.");
+    }
+
+    const userObjectID = new ObjectId(userID);
+    const verification = await VerifyingIdentity.verifications.readOne({ userID: userObjectID });
+
+    if (!verification) {
+      throw new NotFoundError("Verification record not found.");
+    }
+
+    const user = await Authing.getUserById(userObjectID);
+
+    return {
+      userID: verification.userID,
+      username: user.username,
+      data: verification.verificationData.data,
+      status: verification.status,
+    };
+  }
 
   // Participation Routes
 
+  /**
+   * Retrieve events that the current authenticated user has joined.
+   * @returns A list of events.
+   * @throws NotFoundError if the user is not authenticated or does not exist.
+   */
+  @Router.get("/users/current/events")
+  async getCurrentUserEvents(session: SessionDoc) {
+    const userID = Sessioning.getUser(session);
+    if (!userID) {
+      throw new NotFoundError("User not found.");
+    }
+    const eventIDs = await Joining.getActivitiesForUser(userID);
+    // Convert ObjectId to plain hex strings
+    const eventIDsHex = eventIDs.map((id) => id.toHexString());
+
+    return { joinedEvents: eventIDsHex }; // Return event IDs as plain strings
+  }
+
+  /**
+   * Retrieve multiple events by their IDs.
+   * @param ids - Comma-separated event IDs.
+   * @returns A list of event objects.
+   * @throws BadRequestError if no IDs are provided or any ID is invalid.
+   * @throws NotFoundError if one or more events are not found.
+   */
+  @Router.get("/events/multiple")
+  async getMultipleEvents(session: SessionDoc, ids?: string) {
+    if (!ids) {
+      throw new BadRequestError("No event IDs provided.");
+    }
+
+    // Split the comma-separated IDs and convert them to ObjectId
+    let idsArray: ObjectId[];
+    try {
+      idsArray = ids.split(",").map((idStr) => new ObjectId(idStr.trim()));
+    } catch (error) {
+      throw new BadRequestError("One or more event IDs are invalid.");
+    }
+
+    // Fetch events from the database, selecting only necessary fields
+    const events = await Posting.posts.readMany({ _id: { $in: idsArray } }, { projection: { content: 1 } });
+
+    // Check if all requested events were found
+    if (events.length !== idsArray.length) {
+      throw new NotFoundError("One or more events not found.");
+    }
+
+    // Format events to include hexadecimal string IDs and necessary fields
+    const formattedEvents = events.map((event) => ({
+      _id: event._id.toHexString(),
+      content: event.content || "",
+    }));
+
+    return { events: formattedEvents };
+  }
   /**
    * Join an event.
    * @param id - The ID of the event to join.

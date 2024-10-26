@@ -1,17 +1,18 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-
 import { fetchy } from "@/utils/fetchy";
 
 export const useUserStore = defineStore(
   "user",
   () => {
     const currentUsername = ref("");
+    const role = ref<"admin" | "user" | null>(null); // Add role state
 
     const isLoggedIn = computed(() => currentUsername.value !== "");
 
     const resetStore = () => {
       currentUsername.value = "";
+      role.value = null; // Reset role on logout or delete
     };
 
     const createUser = async (username: string, password: string) => {
@@ -24,14 +25,16 @@ export const useUserStore = defineStore(
       await fetchy("/api/login", "POST", {
         body: { username, password },
       });
+      await updateSession(); // Fetch session data after login
     };
 
     const updateSession = async () => {
       try {
-        const { username } = await fetchy("/api/session", "GET", { alert: false });
+        const { username, role: userRole } = await fetchy("/api/session", "GET", { alert: false });
         currentUsername.value = username;
+        role.value = userRole; // Set the role
       } catch {
-        currentUsername.value = "";
+        resetStore();
       }
     };
 
@@ -40,8 +43,9 @@ export const useUserStore = defineStore(
       resetStore();
     };
 
-    const updateUserUsername = async (username: string) => {
-      await fetchy("/api/users/username", "PATCH", { body: { username } });
+    const updateUserUsername = async (newUsername: string) => {
+      await fetchy("/api/users/username", "PATCH", { body: { username: newUsername } });
+      currentUsername.value = newUsername; // Update local state
     };
 
     const updateUserPassword = async (currentPassword: string, newPassword: string) => {
@@ -53,9 +57,14 @@ export const useUserStore = defineStore(
       resetStore();
     };
 
+    // Computed property to check if the user is an admin
+    const isAdmin = computed(() => role.value === "admin");
+
     return {
       currentUsername,
+      role, // Expose role
       isLoggedIn,
+      isAdmin, // Expose isAdmin
       createUser,
       loginUser,
       updateSession,

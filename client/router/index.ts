@@ -11,6 +11,7 @@ import PlansView from "@/views/PlansView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import PostView from "../views/PostView.vue";
 import VerificationView from "../views/VerificationView.vue";
+import AdminVerificationDashboard from "../views/AdminVerificationDashboard.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -49,6 +50,12 @@ const router = createRouter({
       name: "Verification",
       component: VerificationView,
       meta: { requiresAuth: true },
+    },
+    {
+      path: "/admin/verifications",
+      name: "AdminVerificationDashboard",
+      component: AdminVerificationDashboard,
+      meta: { requiresAuth: true, requiresAdmin: true },
     },
     {
       path: "/setting",
