@@ -12,6 +12,7 @@ import ProfileView from "@/views/ProfileView.vue";
 import PostView from "../views/PostView.vue";
 import VerificationView from "../views/VerificationView.vue";
 import AdminVerificationDashboard from "../views/AdminVerificationDashboard.vue";
+import EndorseView from "../views/EndorseView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -44,6 +45,12 @@ const router = createRouter({
       name: "Profile",
       component: ProfileView,
       meta: { requiresAuth: true },
+    },
+    {
+      path: "/endorse/:username?", // New Endorse Route
+      name: "Endorse",
+      component: EndorseView,
+      meta: { requiresAuth: true }, // Ensures only authenticated users can access
     },
     {
       path: "/verification",

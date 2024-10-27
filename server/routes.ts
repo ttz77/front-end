@@ -313,15 +313,16 @@ class Routes {
   @Router.get("/events/multiple")
   async getMultipleEvents(session: SessionDoc, ids?: string) {
     if (!ids) {
-      throw new BadRequestError("No event IDs provided.");
+      throw new Error("No event IDs provided.");
     }
 
     // Split the comma-separated IDs and convert them to ObjectId
     let idsArray: ObjectId[];
     try {
       idsArray = ids.split(",").map((idStr) => new ObjectId(idStr.trim()));
+      // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
     } catch (error) {
-      throw new BadRequestError("One or more event IDs are invalid.");
+      throw new Error("One or more event IDs are invalid.");
     }
 
     // Fetch events from the database, selecting only necessary fields

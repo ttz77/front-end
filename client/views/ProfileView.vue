@@ -1,5 +1,3 @@
-<!-- src/views/Profile.vue -->
-
 <template>
   <main>
     <h1>Profile Page</h1>
@@ -10,6 +8,10 @@
       <!-- Admin Button: Visible Only to Admin Users -->
       <li v-if="isAdmin">
         <RouterLink :to="{ name: 'AdminVerificationDashboard' }" :class="{ underline: currentRouteName === 'AdminVerificationDashboard' }"> Admin Verification Dashboard </RouterLink>
+      </li>
+      <!-- Endorse Users Button: Visible Only to Logged-in Users -->
+      <li v-if="isLoggedIn">
+        <RouterLink :to="{ name: 'Endorse' }" :class="{ underline: currentRouteName === 'Endorse' }"> Endorse Users </RouterLink>
       </li>
     </ul>
   </main>
