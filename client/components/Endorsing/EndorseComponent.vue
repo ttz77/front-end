@@ -59,7 +59,6 @@ const endorseUsername = ref(""); // Username to endorse via the form
 const skill = ref(""); // Skill to endorse
 
 const isSubmitting = ref(false);
-const isRemoving = ref<string[]>([]); // Tracks skills being removed
 
 // Access endorsements store
 const endorsementsStore = useEndorsementsStore();
@@ -106,36 +105,6 @@ const handleEndorse = async () => {
     });
   } finally {
     isSubmitting.value = false;
-  }
-};
-
-/**
- * Handle removal of an endorsement.
- * @param skillToRemove - The skill endorsement to remove.
- */
-const handleRemoveEndorsement = async (skillToRemove: string) => {
-  if (!targetUsername.value) {
-    toastStore.showToast({
-      message: "Please provide the username first.",
-      style: "error",
-    });
-    return;
-  }
-
-  isRemoving.value.push(skillToRemove);
-  try {
-    await endorsementsStore.removeEndorsement(targetUsername.value, skillToRemove);
-    toastStore.showToast({
-      message: `Removed endorsement for ${skillToRemove}.`,
-      style: "success",
-    });
-  } catch (error: any) {
-    toastStore.showToast({
-      message: error.message || "Failed to remove endorsement.",
-      style: "error",
-    });
-  } finally {
-    isRemoving.value = isRemoving.value.filter((skill) => skill !== skillToRemove);
   }
 };
 

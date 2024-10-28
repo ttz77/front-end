@@ -13,6 +13,7 @@ import PostView from "../views/PostView.vue";
 import VerificationView from "../views/VerificationView.vue";
 import AdminVerificationDashboard from "../views/AdminVerificationDashboard.vue";
 import EndorseView from "../views/EndorseView.vue";
+import LocationSharingView from "../views/LocationSharingView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -47,7 +48,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: "/endorse/:username?", // New Endorse Route
+      path: "/endorse",
       name: "Endorse",
       component: EndorseView,
       meta: { requiresAuth: true }, // Ensures only authenticated users can access
@@ -81,6 +82,12 @@ const router = createRouter({
           return { name: "Settings" };
         }
       },
+    },
+    {
+      path: "/location-sharing",
+      name: "LocationSharing",
+      component: LocationSharingView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/:catchAll(.*)",

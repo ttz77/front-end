@@ -574,12 +574,18 @@ class Routes {
   async getTrustedContactsLocations(session: SessionDoc) {
     const userID = Sessioning.getUser(session);
     const locations = await LocationSharing.getTrustedContactsLocations(userID);
-    const formattedLocations = locations.map((loc) => ({
-      userID: loc.userID,
+
+    // Fetch usernames for each contact
+    const contactIDs = locations.map((loc) => loc.userID);
+    const contactUsernames = await Authing.idsToUsernames(contactIDs);
+
+    const formattedLocations = locations.map((loc, index) => ({
+      username: contactUsernames[index],
       latitude: loc.latitude,
       longitude: loc.longitude,
       timestamp: loc.timestamp,
     }));
+
     return { locations: formattedLocations };
   }
 }
