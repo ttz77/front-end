@@ -1,5 +1,3 @@
-<!-- src/components/Verification/VerificationComponent.vue -->
-
 <template>
   <div class="verification-component">
     <h2>Submit Verification Information</h2>
@@ -116,12 +114,17 @@ select {
 button {
   width: 100%;
   padding: 0.75rem;
-  background-color: #4caf50;
+  background-color: #6daf6f;
   color: white;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+button:hover:not(:disabled) {
+  background-color: #5e9e5f; /* Slightly darker green for hover effect */
 }
 
 button:disabled {

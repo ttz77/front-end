@@ -87,7 +87,7 @@ onBeforeMount(async () => {
 /* Top navigation */
 nav {
   padding: 1em 2em;
-  background-color: lightgray;
+  background-color: #b3d9ff; /* Pastel blue */
   display: flex;
   align-items: center;
 }
@@ -131,19 +131,21 @@ ul {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #ecf0f1;
+  background-color: #b3d9ff; /* Pastel blue */
 }
 
 .bottom-nav ul {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-around; /* Adjusted to evenly space the icons */
   list-style: none;
   padding: 0.5rem 0;
   margin: 0;
+  width: 100%;
 }
 
 .bottom-nav li {
   text-align: center;
+  flex: 1;
 }
 
 .bottom-nav a {

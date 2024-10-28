@@ -2,7 +2,7 @@
 
 <template>
   <section class="joined-events">
-    <h2>Your Joined Events</h2>
+    <h2>Your Joined Events:</h2>
     <div v-if="isLoading">
       <p>Loading your joined events...</p>
     </div>
@@ -114,17 +114,18 @@ li {
 }
 
 button {
-  margin-top: 0.5rem;
+  display: block; /* Make the button take up the full width of the container for centering */
+  margin: 1rem auto 0 auto; /* Center the button horizontally */
   padding: 0.5rem 1rem;
-  background-color: #dc3545;
+  background-color: #c3aed6; /* Pastel lavender background */
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px; /* Make the corners rounded */
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #c82333;
+  background-color: #b095c9; /* Slightly darker lavender on hover */
 }
 
 button:disabled {

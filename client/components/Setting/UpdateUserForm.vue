@@ -27,7 +27,7 @@ async function updatePassword() {
     <fieldset>
       <legend>Change your username</legend>
       <input type="text" placeholder="New username" v-model="username" required />
-      <button type="submit" class="pure-button pure-button-primary">Update username</button>
+      <button type="submit" class="pure-button pastel-green-button">Update username</button>
     </fieldset>
   </form>
 
@@ -36,7 +36,22 @@ async function updatePassword() {
       <legend>Change your password</legend>
       <input type="password" placeholder="Old password" v-model="currentPassword" required />
       <input type="password" placeholder="New password" v-model="newPassword" required />
-      <button type="submit" class="pure-button pure-button-primary">Update password</button>
+      <button type="submit" class="pure-button pastel-green-button">Update password</button>
     </fieldset>
   </form>
 </template>
+
+<style scoped>
+.pastel-green-button {
+  background-color: #a8d5ba; /* pastel green */
+  color: #333;
+  border: none;
+  border-radius: 4px; /* rounded corners */
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.pastel-green-button:hover {
+  background-color: #92c7a3; /* slightly darker pastel green for hover effect */
+}
+</style>

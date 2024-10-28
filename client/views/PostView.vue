@@ -13,4 +13,8 @@ import CreatePostForm from "@/components/Post/CreatePostForm.vue";
 h1 {
   text-align: center;
 }
+
+main {
+  margin: 0 3rem; /* Add 2rem of margin on both left and right sides */
+}
 </style>

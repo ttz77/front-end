@@ -3,7 +3,7 @@
     <h1>Profile Page</h1>
     <ul>
       <li v-if="isLoggedIn">
-        <RouterLink :to="{ name: 'Verification' }" :class="{ underline: currentRouteName === 'Verification' }"> Verification </RouterLink>
+        <RouterLink :to="{ name: 'Verification' }" :class="{ underline: currentRouteName === 'Verification' }" class="verification-button"> Verification </RouterLink>
       </li>
       <!-- Admin Button: Visible Only to Admin Users -->
       <li v-if="isAdmin">
@@ -11,7 +11,7 @@
       </li>
       <!-- Endorse Users Button: Visible Only to Logged-in Users -->
       <li v-if="isLoggedIn">
-        <RouterLink :to="{ name: 'Endorse' }" :class="{ underline: currentRouteName === 'Endorse' }"> Endorse Users </RouterLink>
+        <RouterLink :to="{ name: 'Endorse' }" :class="{ underline: currentRouteName === 'Endorse' }" class="endorse-button"> Endorse Users </RouterLink>
       </li>
     </ul>
   </main>
@@ -40,14 +40,42 @@ h1 {
 ul {
   list-style-type: none;
   padding: 0;
+  text-align: center;
 }
 
 li {
-  margin: 0.5rem 0;
+  margin: 1rem 0; /* Increase vertical spacing between buttons */
 }
 
 .underline {
   text-decoration: underline;
+}
+
+/* Button Styles */
+.verification-button {
+  padding: 1rem 2rem;
+  background-color: #dc3545;
+  border: none;
+  border-radius: 6px;
+  color: #333;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1.2rem; /* Increase font size */
+  margin-bottom: 1rem; /* Additional spacing between buttons */
+  display: inline-block;
+}
+
+.endorse-button {
+  padding: 1rem 2rem; /* Increase padding for larger button size */
+  background-color: #e6ccff; /* pastel purple */
+  border: none;
+  border-radius: 6px;
+  color: #333;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1.2rem; /* Increase font size */
+  margin-top: 1rem; /* Additional spacing between buttons */
+  display: inline-block;
 }
 
 button {

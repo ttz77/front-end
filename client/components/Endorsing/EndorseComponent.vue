@@ -1,5 +1,3 @@
-<!-- src/components/EndorseComponent.vue -->
-
 <template>
   <div class="endorse-component">
     <h2>Endorse a User</h2>
@@ -14,7 +12,7 @@
         <input type="text" id="skill" v-model="skill" required placeholder="Enter the skill to endorse" />
       </div>
 
-      <button type="submit" :disabled="isSubmitting">
+      <button type="submit" :disabled="isSubmitting" class="lavender-button">
         {{ isSubmitting ? "Endorsing..." : "Endorse" }}
       </button>
     </form>
@@ -28,6 +26,7 @@
         <ul v-if="endorsements.length > 0">
           <li v-for="endorsement in endorsements" :key="endorsement">
             <p>{{ endorsement }}</p>
+            <hr />
           </li>
         </ul>
         <p v-else>No endorsements yet.</p>
@@ -140,6 +139,7 @@ watch(
 
 <style scoped>
 .endorse-component {
+  background-color: #f0f0f0; /* Light grey background */
   padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -159,15 +159,21 @@ input[type="text"] {
   width: 100%;
   padding: 0.5rem;
   box-sizing: border-box;
+  border-radius: 8px;
+  border: none;
 }
 
 button {
   padding: 0.5rem 1rem;
-  background-color: #28a745;
+  background-color: #c3aed6; /* Pastel lavender purple */
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
+}
+
+button:hover {
+  background-color: #b095c9; /* Slightly darker lavender */
 }
 
 button[disabled] {
@@ -189,6 +195,7 @@ button[disabled] {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
 }
 
 .existing-endorsements button {

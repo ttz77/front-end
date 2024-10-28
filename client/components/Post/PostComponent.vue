@@ -51,6 +51,30 @@ menu {
   padding: 0;
   margin: 0;
 }
+.btn-small {
+  padding: 0.5rem 1rem;
+  border-radius: 12px; /* Make buttons rounded */
+  cursor: pointer;
+  border: none;
+}
+
+.pure-button {
+  background-color: #a8d5ba; /* Pastel green for edit button */
+  color: #333;
+}
+
+.pure-button:hover {
+  background-color: #92c7a3; /* Slightly darker pastel green on hover */
+}
+
+.button-error {
+  background-color: #f28b8b; /* Richer pastel red for delete button */
+  color: #333;
+}
+
+.button-error:hover {
+  background-color: #e06666; /* Slightly more intense red on hover */
+}
 
 .timestamp {
   display: flex;

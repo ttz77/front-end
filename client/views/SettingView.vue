@@ -1,13 +1,17 @@
-<!-- client/views/SettingsView.vue -->
 <template>
   <main class="column">
     <h1>Settings for {{ currentUsername }}</h1>
-    <button class="pure-button pure-button-primary" @click="logout">Logout</button>
-    <button class="button-error pure-button" @click="delete_">Delete User</button>
-    <UpdateUserForm />
+    <div class="right-align">
+      <button class="pure-button pure-button-primary" @click="logout">Logout</button>
+    </div>
+    <button class="pure-button pastel-green-button" @click="goToLocationSharing" v-if="isLoggedIn">Manage Location Sharing</button>
+    <div class="left-align">
+      <UpdateUserForm />
+    </div>
 
-    <!-- New Button to Navigate to Location Sharing -->
-    <button class="pure-button pure-button-secondary" @click="goToLocationSharing" v-if="isLoggedIn">Manage Location Sharing</button>
+    <div class="right-align">
+      <button class="button-error pure-button" @click="delete_">Delete User</button>
+    </div>
   </main>
 </template>
 
@@ -43,20 +47,75 @@ function goToLocationSharing() {
 .column {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 16px;
 }
 
-.pure-button-secondary {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
+.right-align {
+  align-self: flex-end;
+  width: 100%; /* Ensures the button aligns to the right within the container */
+  text-align: right; /* Aligns the button to the right */
+}
+
+.left-align {
+  align-self: flex-start;
+  width: 100%;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
   cursor: pointer;
 }
 
+.pure-button-primary {
+  background-color: #99c1e0;
+  color: white;
+  border: none;
+}
+
+.pure-button-primary:hover {
+  background-color: #85add0;
+}
+
+.pure-button-secondary {
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+}
+
 .pure-button-secondary:hover {
-  background-color: #0056b3;
+  background-color: #524eb7;
+}
+
+.button-error {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+.button-error:hover {
+  background-color: #c82333;
+}
+
+/* New style for the pastel green button */
+.pastel-green-button {
+  background-color: #a8d5ba; /* pastel green */
+  color: #333;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
+}
+
+.pastel-green-button:hover {
+  background-color: #92c7a3; /* darker pastel green for hover */
 }
 </style>

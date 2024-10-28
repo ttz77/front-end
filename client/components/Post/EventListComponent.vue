@@ -1,5 +1,3 @@
-<!-- src/components/EventListComponent.vue -->
-
 <template>
   <div class="row">
     <h2 v-if="!searchAuthor">Events coming up:</h2>
@@ -13,8 +11,8 @@
       <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
 
       <!-- Join/Leave Event Button -->
-      <button v-if="!joinedEvents.includes(post._id)" @click="handleJoinEvent(post._id)" :disabled="isProcessing.includes(post._id)">Join Event</button>
-      <button v-else @click="handleLeaveEvent(post._id)" :disabled="isProcessing.includes(post._id)">Leave Event</button>
+      <button v-if="!joinedEvents.includes(post._id)" @click="handleJoinEvent(post._id)" :disabled="isProcessing.includes(post._id)" class="join-event-button">Join Event</button>
+      <button v-else @click="handleLeaveEvent(post._id)" :disabled="isProcessing.includes(post._id)" class="join-event-button">Leave Event</button>
     </article>
   </section>
 
@@ -144,20 +142,24 @@ article {
 
 button {
   margin-top: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: white;
+  padding: 0.5rem 0.8rem; /* Reduced width on both sides */
+  background-color: #c3aed6; /* Pastel lavender purple */
+  color: #ffffff;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
+  width: fit-content;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #b095c9; /* Slightly darker lavender */
 }
 
 button:disabled {
-  background-color: #6c757d;
+  background-color: #f0e6e6; /* Light pastel gray */
   cursor: not-allowed;
 }
 
@@ -169,5 +171,12 @@ button:disabled {
 .success {
   color: green;
   margin-top: 1rem;
+}
+.join-event-button {
+  background-color: #c3aed6; /* Pastel lavender purple */
+}
+
+.join-event-button:hover {
+  background-color: #b095c9; /* Slightly darker lavender */
 }
 </style>
