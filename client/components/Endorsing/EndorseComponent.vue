@@ -23,8 +23,8 @@
         <p>Loading endorsements...</p>
       </div>
       <div v-else>
-        <ul v-if="endorsements.length > 0">
-          <li v-for="endorsement in endorsements" :key="endorsement">
+        <ul v-if="endorsementsForTargetUser.length > 0">
+          <li v-for="endorsement in endorsementsForTargetUser" :key="endorsement">
             <p>{{ endorsement }}</p>
             <hr />
           </li>
@@ -36,10 +36,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useEndorsementsStore } from "@/stores/endorsements";
-import { useToastStore } from "@/stores/toast"; // Assuming you have a toast store
+import { useToastStore } from "@/stores/toast";
 import { defineProps } from "vue";
 import { useUserStore } from "@/stores/user";
 
@@ -65,6 +65,11 @@ const { endorsements, isLoading } = storeToRefs(endorsementsStore);
 
 // Access toast store for notifications
 const toastStore = useToastStore();
+
+/**
+ * Computed property to get endorsements for the target user
+ */
+const endorsementsForTargetUser = computed(() => endorsements.value[targetUsername.value] || []);
 
 /**
  * Handle endorsement submission.
@@ -97,6 +102,11 @@ const handleEndorse = async () => {
     // Clear input fields after successful endorsement
     endorseUsername.value = "";
     skill.value = "";
+
+    // Refetch endorsements for the target user
+    if (targetUsername.value) {
+      await endorsementsStore.fetchEndorsements(targetUsername.value);
+    }
   } catch (error: any) {
     toastStore.showToast({
       message: error.message || "Failed to endorse the user.",
@@ -113,7 +123,7 @@ const handleEndorse = async () => {
 onMounted(async () => {
   if (targetUsername.value) {
     await endorsementsStore.fetchEndorsements(targetUsername.value);
-    console.log("Fetched endorsements on mount:", endorsements.value); // Debugging
+    console.log("Fetched endorsements on mount:", endorsementsForTargetUser.value); // Debugging
   }
 });
 
@@ -126,9 +136,10 @@ watch(
     if (newUsername) {
       targetUsername.value = newUsername;
       await endorsementsStore.fetchEndorsements(newUsername);
-      console.log("Fetched endorsements on username change:", endorsements.value); // Debugging
+      console.log("Fetched endorsements on username change:", endorsementsForTargetUser.value); // Debugging
     } else {
-      endorsements.value = [];
+      // Clear endorsements for the target user
+      endorsements.value[targetUsername.value] = [];
       targetUsername.value = "";
       console.log("No username provided, cleared endorsements.");
     }

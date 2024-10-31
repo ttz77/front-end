@@ -5,7 +5,8 @@ import { ref } from "vue";
 import { fetchy } from "@/utils/fetchy"; // Ensure fetchy is correctly set up
 
 export const useEndorsementsStore = defineStore("endorsements", () => {
-  const endorsements = ref<string[]>([]); // Array of skill names
+  // Change endorsements to store endorsements per user
+  const endorsements = ref<Record<string, string[]>>({}); // Mapping usernames to arrays of skills
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
@@ -20,13 +21,12 @@ export const useEndorsementsStore = defineStore("endorsements", () => {
       const response = await fetchy(`/api/users/${username}/endorsements`, "GET");
       console.log("Fetched endorsements response:", response); // Debugging
 
-      // Transform the skills object into an array of skill names
+      // Store the endorsements under the specific username
       if (response.skills && typeof response.skills === "object") {
-        endorsements.value = Object.keys(response.skills); // Assigning array of keys
-        console.log("Endorsements set in store:", endorsements.value); // Debugging
+        endorsements.value[username] = Object.keys(response.skills);
+        console.log(`Endorsements set in store for ${username}:`, endorsements.value[username]); // Debugging
       } else {
-        // Handle unexpected data formats
-        endorsements.value = [];
+        endorsements.value[username] = [];
         console.warn("Unexpected skills format:", response.skills);
       }
     } catch (err: any) {
@@ -49,7 +49,7 @@ export const useEndorsementsStore = defineStore("endorsements", () => {
       });
       console.log("Endorse user response:", response); // Debugging
 
-      // Refetch endorsements after successful endorsement
+      // Refetch endorsements for the endorsed user
       await fetchEndorsements(username);
     } catch (err: any) {
       console.error("Failed to endorse user:", err);
@@ -64,15 +64,11 @@ export const useEndorsementsStore = defineStore("endorsements", () => {
    */
   async function removeEndorsement(username: string, skill: string): Promise<void> {
     try {
-      // Encode the skill to ensure it's URL-safe
       const encodedSkill = encodeURIComponent(skill);
-
-      // Append the skill as a query parameter
       const response = await fetchy(`/api/users/${username}/endorsements?skill=${encodedSkill}`, "DELETE");
-
       console.log("Remove endorsement response:", response); // Debugging
 
-      // Refetch endorsements after successful removal
+      // Refetch endorsements for the user after removal
       await fetchEndorsements(username);
     } catch (err: any) {
       console.error("Failed to remove endorsement:", err);
